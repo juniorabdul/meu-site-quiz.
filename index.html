@@ -3,59 +3,165 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login & Registro Neumorfismo</title>
+    <title>Dev Quiz - Níveis</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Ajustes específicos para o Quiz */
+        .quiz-container { max-width: 500px; width: 90%; }
+        .progress-bar {
+            height: 10px; background: #e0e5ec; border-radius: 10px;
+            margin: 20px 0; box-shadow: inset 4px 4px 8px #cbced1, inset -4px -4px 8px #ffffff;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%; width: 0%; background: #5dbcd2;
+            transition: width 0.5s ease;
+        }
+        .options { display: flex; flex-direction: column; gap: 15px; margin-top: 20px; }
+        .opt-btn {
+            padding: 15px; border: none; border-radius: 15px; background: #e0e5ec;
+            color: #31344b; cursor: pointer; font-weight: 500;
+            box-shadow: 6px 6px 12px #cbced1, -6px -6px 12px #ffffff;
+            transition: 0.2s;
+        }
+        .opt-btn:active { box-shadow: inset 4px 4px 8px #cbced1, inset -4px -4px 8px #ffffff; }
+        .opt-btn.correct { background: #2ecc71; color: white; }
+        .opt-btn.wrong { background: #e74c3c; color: white; }
+        .level-badge {
+            display: inline-block; padding: 5px 15px; border-radius: 20px;
+            font-size: 12px; font-weight: bold; margin-bottom: 10px;
+            background: #e0e5ec; box-shadow: 3px 3px 6px #cbced1;
+        }
+    </style>
 </head>
 <body>
 
     <div class="container">
-        <div class="login-card" id="login-form">
-            <div class="logo-container">
-                <div class="logo-inner"><i class="fa-solid fa-code"></i></div>
+        <div class="login-card quiz-container" id="quiz-card">
+            <span id="level-text" class="level-badge">Nível: Baixo (Front-end)</span>
+            <h2 id="question-title">Carregando pergunta...</h2>
+            
+            <div class="progress-bar">
+                <div id="progress" class="progress-fill"></div>
             </div>
-            <h2>Site quiz</h2>
-            <p class="subtitle">Faça login para continuar</p>
 
-            <div class="input-group">
-                <i class="fa-regular fa-user"></i>
-                <input type="text" id="login-user" placeholder="username">
-            </div>
-            <div class="input-group">
-                <i class="fa-solid fa-lock"></i>
-                <input type="password" id="login-pass" placeholder="password">
-            </div>
-            <button onclick="fazerLogin()" class="login-btn">Login</button>
+            <div id="options-container" class="options">
+                </div>
 
-            <div class="footer-links">
-                Não tem conta? <a href="#" onclick="alternarTelas()"><strong>Sign Up</strong></a>
-            </div>
+            <p class="subtitle" id="score-text" style="margin-top: 20px;">Pontos: 0</p>
         </div>
 
-        <div class="login-card" id="register-form" style="display: none;">
-            <div class="logo-container">
-                <div class="logo-inner"><i class="fa-solid fa-user-plus"></i></div>
-            </div>
-            <h2>Criar Conta</h2>
-            <p class="subtitle">Escolha um nickname único</p>
-
-            <div class="input-group">
-                <i class="fa-regular fa-user"></i>
-                <input type="text" id="reg-user" placeholder="escolha um nickname">
-            </div>
-            <div class="input-group">
-                <i class="fa-solid fa-lock"></i>
-                <input type="password" id="reg-pass" placeholder="escolha uma senha">
-            </div>
-            <button onclick="registrarUsuario()" class="login-btn">Cadastrar</button>
-
-            <div class="footer-links">
-                Já tem conta? <a href="#" onclick="alternarTelas()"><strong>Login</strong></a>
-            </div>
+        <div class="login-card quiz-container" id="result-card" style="display: none;">
+            <h2>Quiz Finalizado!</h2>
+            <p id="final-msg" class="subtitle"></p>
+            <button onclick="window.location.reload()" class="login-btn">Tentar Novamente</button>
+            <button onclick="logout()" class="login-btn" style="background: #e74c3c; margin-top: 0;">Sair</button>
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <script>
+        // Verificação de segurança
+        const usuarioLogado = localStorage.getItem('usuarioAtivo');
+        if (!usuarioLogado) { window.location.href = "index.html"; }
+
+        const perguntas = [
+            // NÍVEL BAIXO (Front-end)
+            { q: "Qual tag HTML é usada para criar um link?", options: ["<link>", "<a>", "<href>", "<url>"], correct: 1, level: "Baixo" },
+            { q: "O que significa CSS?", options: ["Computer Style Sheets", "Creative Style System", "Cascading Style Sheets", "Color Style Sheets"], correct: 2, level: "Baixo" },
+            
+            // NÍVEL MÉDIO (JS e Lógica)
+            { q: "Qual comando JS exibe algo no console?", options: ["print()", "console.log()", "msg()", "alert.box()"], correct: 1, level: "Médio" },
+            { q: "Como declarar uma variável constante em JS?", options: ["var", "let", "constant", "const"], correct: 3, level: "Médio" },
+
+            // NÍVEL ALTO (Web Avançado)
+            { q: "O que é o DOM no desenvolvimento Web?", options: ["Data Object Model", "Document Object Model", "Digital Order Mode", "Desktop Object Management"], correct: 1, level: "Alto" },
+            { q: "Qual método HTTP é usado para ENVIAR dados ao servidor?", options: ["GET", "FETCH", "POST", "UPDATE"], correct: 2, level: "Alto" }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+
+        function loadQuestion() {
+            const qData = perguntas[currentQuestion];
+            document.getElementById('level-text').innerText = "Nível: " + qData.level;
+            document.getElementById('question-title').innerText = qData.q;
+            
+            const optionsDiv = document.getElementById('options-container');
+            optionsDiv.innerHTML = "";
+
+            qData.options.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = "opt-btn";
+                btn.innerText = opt;
+                btn.onclick = () => checkAnswer(index);
+                optionsDiv.appendChild(btn);
+            });
+
+            // Atualiza barra de progresso
+            const prog = ((currentQuestion) / perguntas.length) * 100;
+            document.getElementById('progress').style.width = prog + "%";
+        }
+
+        function checkAnswer(selected) {
+            const correct = perguntas[currentQuestion].correct;
+            const btns = document.querySelectorAll('.opt-btn');
+
+            if (selected === correct) {
+                btns[selected].classList.add('correct');
+                score += 10;
+            } else {
+                btns[selected].classList.add('wrong');
+                btns[correct].classList.add('correct');
+            }
+
+            document.getElementById('score-text').innerText = "Pontos: " + score;
+
+            // Espera 1 segundo e vai para a próxima
+            setTimeout(() => {
+                currentQuestion++;
+                if (currentQuestion < perguntas.length) {
+                    loadQuestion();
+                } else {
+                    showResult();
+                }
+            }, 1000);
+        }
+
+        function showResult() {
+            document.getElementById('quiz-card').style.display = "none";
+            document.getElementById('result-card').style.display = "block";
+            document.getElementById('final-msg').innerText = `Parabéns, ${usuarioLogado}! Você fez ${score} pontos.`;
+        }
+
+        function logout() {
+            localStorage.removeItem('usuarioAtivo');
+            window.location.href = "index.html";
+        }
+
+        // Inicia o quiz
+        loadQuestion();
+    </script>
+    
+    <div id="ad-popup">
+  <!-- Código do anúncio aqui -->
+  <p>Publicidade</p>
+</div>
+
+<style>
+#ad-popup {
+  position: fixed;
+  bottom: 10px;
+  right: 10px; /* muda pra left se quiser */
+  width: 250px;
+  height: 120px;
+  background: white;
+  border: 1px solid #ccc;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  z-index: 9999;
+  padding: 5px;
+}
+</style>
+    
 </body>
 </html>
->
