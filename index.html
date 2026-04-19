@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login & Registro Neumorfismo</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="container">
+        <div class="login-card" id="login-form">
+            <div class="logo-container">
+                <div class="logo-inner"><i class="fa-solid fa-code"></i></div>
+            </div>
+            <h2>Site quiz</h2>
+            <p class="subtitle">Faça login para continuar</p>
+
+            <div class="input-group">
+                <i class="fa-regular fa-user"></i>
+                <input type="text" id="login-user" placeholder="username">
+            </div>
+            <div class="input-group">
+                <i class="fa-solid fa-lock"></i>
+                <input type="password" id="login-pass" placeholder="password">
+            </div>
+            <button onclick="fazerLogin()" class="login-btn">Login</button>
+
+            <div class="footer-links">
+                Não tem conta? <a href="#" onclick="alternarTelas()"><strong>Sign Up</strong></a>
+            </div>
+        </div>
+
+        <div class="login-card" id="register-form" style="display: none;">
+            <div class="logo-container">
+                <div class="logo-inner"><i class="fa-solid fa-user-plus"></i></div>
+            </div>
+            <h2>Criar Conta</h2>
+            <p class="subtitle">Escolha um nickname único</p>
+
+            <div class="input-group">
+                <i class="fa-regular fa-user"></i>
+                <input type="text" id="reg-user" placeholder="escolha um nickname">
+            </div>
+            <div class="input-group">
+                <i class="fa-solid fa-lock"></i>
+                <input type="password" id="reg-pass" placeholder="escolha uma senha">
+            </div>
+            <button onclick="registrarUsuario()" class="login-btn">Cadastrar</button>
+
+            <div class="footer-links">
+                Já tem conta? <a href="#" onclick="alternarTelas()"><strong>Login</strong></a>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+>
