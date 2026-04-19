@@ -1,0 +1,126 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #e0e5ec; /* Cor de fundo suave */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.login-card {
+    background-color: #e0e5ec;
+    padding: 40px;
+    border-radius: 40px;
+    width: 350px;
+    text-align: center;
+    /* Efeito de elevação do card principal */
+    box-shadow: 9px 9px 16px rgb(163, 177, 198, 0.6), 
+               -9px -9px 16px rgba(255, 255, 255, 0.5);
+}
+
+/* Logo Circular */
+.logo-container {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 20px;
+    background-color: #e0e5ec;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: inset 6px 6px 10px 0 rgba(0, 0, 0, 0.2),
+                inset -6px -6px 10px 0 rgba(255, 255, 255, 0.5);
+}
+
+.logo-inner {
+    width: 60px;
+    height: 60px;
+    background: #1a1a1a; /* Cor interna do logo */
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #4facfe;
+    font-size: 24px;
+}
+
+h2 {
+    color: #31344b;
+    font-size: 22px;
+    margin-bottom: 5px;
+}
+
+.subtitle {
+    color: #444;
+    font-size: 13px;
+    margin-bottom: 30px;
+}
+
+/* Estilização dos Inputs (Efeito de Profundidade) */
+.input-group {
+    background-color: #e0e5ec;
+    margin-bottom: 20px;
+    padding: 15px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    /* O efeito "dentro" do papel */
+    box-shadow: inset 6px 6px 6px #cbced1, 
+                inset -6px -6px 6px white;
+}
+
+.input-group i {
+    color: #555;
+    margin-right: 15px;
+}
+
+.input-group input {
+    background: transparent;
+    border: none;
+    outline: none;
+    width: 100%;
+    color: #31344b;
+}
+
+/* Botão Login */
+.login-btn {
+    width: 100%;
+    padding: 15px;
+    border-radius: 20px;
+    border: none;
+    background: #5dbcd2; /* Cor azul claro da imagem */
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    margin: 20px 0;
+    box-shadow: 3px 3px 8px #b1b1b1,
+                -3px -3px 8px #ffffff;
+    transition: 0.3s;
+}
+
+.login-btn:active {
+    box-shadow: inset 3px 3px 8px #4a96a8, 
+                inset -3px -3px 8px #70e2fc;
+}
+
+/* Links do Rodapé */
+.footer-links {
+    font-size: 12px;
+    color: #777;
+}
+
+.footer-links a {
+    text-decoration: none;
+    color: #777;
+}
+
+.footer-links strong {
+    color: #555;
+}
